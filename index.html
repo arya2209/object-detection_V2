@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0e1013">
+    <meta name="color-scheme" content="dark">
+
+    <title>Object Detection Camera</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
+    >
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-camera"></i>
+            Object Detection
+        </div>
+
+        <div class="nav-status">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="cameraStatus">Kamera Mati</span>
+        </div>
+    </nav>
+
+
+    <!-- Main Content -->
+    <main class="container">
+
+        <!-- Camera Section -->
+        <section class="camera-section">
+
+            <div class="section-header">
+                <div>
+                    <h1>Live Camera</h1>
+                    <p>Deteksi objek secara langsung dari kamera HP</p>
+                </div>
+            </div>
+
+            <!-- Camera Container -->
+            <div class="camera-container" id="cameraBox">
+
+                <!-- Video Kamera -->
+                <video
+                    id="video"
+                    autoplay
+                    muted
+                    playsinline>
+                </video>
+
+                <!-- Canvas untuk Bounding Box -->
+                <canvas id="canvas"></canvas>
+
+                <!-- Loading -->
+                <div id="loading" class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Memuat model AI...</p>
+                </div>
+
+                <!-- Camera Placeholder -->
+                <div id="cameraPlaceholder" class="camera-placeholder">
+                    <i class="fa-solid fa-video-slash"></i>
+                    <p>Kamera belum aktif</p>
+                    <button id="startCameraBtn">
+                        <i class="fa-solid fa-video"></i>
+                        Aktifkan Kamera
+                    </button>
+                </div>
+
+            </div>
+
+
+            <!-- Kontrol Kamera -->
+            <div class="controls">
+
+                <button id="cameraBtn" class="ctl">
+                    <i class="fa-solid fa-video-slash"></i>
+                    <span>Kamera</span>
+                    <small>Off</small>
+                </button>
+
+                <button id="flashBtn" class="ctl" disabled>
+                    <i class="fa-solid fa-bolt"></i>
+                    <span>Flash</span>
+                    <small>Off</small>
+                </button>
+
+                <button id="detectBtn" class="ctl" disabled>
+                    <i class="fa-solid fa-eye-slash"></i>
+                    <span>Deteksi</span>
+                    <small>Off</small>
+                </button>
+
+                <button id="personBtn" class="ctl">
+                    <i class="fa-solid fa-person"></i>
+                    <span>Person</span>
+                    <small>Semua</small>
+                </button>
+
+            </div>
+
+            <div id="toast" class="toast"></div>
+
+            <!-- Detection Information -->
+            <div class="detection-info">
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+
+                    <div>
+                        <span class="info-label">Objek Terdeteksi</span>
+                        <h3 id="detectedObject">-</h3>
+                    </div>
+                </div>
+
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+
+                    <div>
+                        <span class="info-label">Confidence</span>
+                        <h3 id="confidence">-</h3>
+                    </div>
+                </div>
+
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+
+                    <div>
+                        <span class="info-label">Detection Terakhir</span>
+                        <h3 id="lastDetection">-</h3>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- History Section -->
+        <section class="history-section">
+
+            <div class="section-header history-header">
+
+                <div>
+                    <h2>Detection History</h2>
+                    <p>Riwayat objek yang telah terdeteksi</p>
+                </div>
+
+                <button id="clearHistoryBtn" class="clear-btn">
+                    <i class="fa-solid fa-trash"></i>
+                    Hapus History
+                </button>
+
+            </div>
+
+
+            <!-- History Table -->
+            <div class="history-container">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Objek</th>
+                            <th>Confidence</th>
+                            <th>Waktu</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="historyList">
+
+                        <!-- Data history akan dimasukkan oleh JavaScript -->
+
+                        <tr id="emptyHistory">
+                            <td colspan="5">
+
+                                <div class="empty-history">
+
+                                    <i class="fa-solid fa-clock-rotate-left"></i>
+
+                                    <h3>Belum Ada History</h3>
+
+                                    <p>
+                                        Hasil deteksi objek akan muncul di sini.
+                                    </p>
+
+                                </div>
+
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+        <!-- Footer -->
+    <footer>
+        <p>
+            Object Detection Camera &copy; 2026
+        </p>
+    </footer>
+
+
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+
+    <!-- COCO-SSD -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+
+    <!-- JavaScript (module, sudah berisi Firebase) -->
+    <script type="module" src="app.js"></script>
+
+</body>
+</html>

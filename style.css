@@ -1,0 +1,323 @@
+/* ================================
+   TEMA — DARK ELEGANT
+   Grafit hangat + aksen champagne.
+   Tanpa warna neon / glow.
+================================ */
+
+:root {
+    --bg: #0e1013;
+    --bg-soft: #13161a;
+    --card: #171a1f;
+    --card-hover: #1c2025;
+    --line: #262a31;
+    --line-soft: #1f2329;
+
+    --text: #ebe7de;
+    --text-soft: #c9c5bb;
+    --muted: #8a8f99;
+    --faint: #5f646d;
+
+    --accent: #c4aa7a;
+    --accent-hover: #d3bb8e;
+    --accent-soft: rgba(196, 170, 122, 0.10);
+    --accent-line: rgba(196, 170, 122, 0.35);
+    --on-accent: #17140e;
+
+    --ok: #82a48f;
+    --ok-soft: rgba(130, 164, 143, 0.12);
+    --danger: #bd7a7a;
+    --danger-soft: rgba(189, 122, 122, 0.10);
+
+    --radius: 18px;
+    --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --font-display: "Cormorant Garamond", "Playfair Display", Georgia, "Times New Roman", serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-body);
+    background:
+        radial-gradient(1100px 500px at 50% -150px, #1a1d23 0%, transparent 70%),
+        var(--bg);
+    background-attachment: fixed;
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+}
+
+button { font-family: inherit; }
+
+
+/* ================================
+   NAVBAR
+================================ */
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    height: 64px;
+    padding: 0 max(20px, env(safe-area-inset-right)) 0 max(20px, env(safe-area-inset-left));
+    background: rgba(14, 16, 19, 0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex; align-items: center; gap: 12px;
+    font-family: var(--font-display);
+    font-size: 22px; font-weight: 600; letter-spacing: 0.04em;
+    color: var(--text);
+}
+.logo i { color: var(--accent); font-size: 16px; }
+
+.nav-status {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 14px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+}
+
+.status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--faint); transition: 0.2s; }
+.status-dot.on { background: var(--ok); }
+.status-dot.detecting { animation: pulse 1.6s ease-in-out infinite; }
+
+@keyframes pulse { 50% { opacity: 0.35; } }
+
+
+/* ================================
+   LAYOUT
+================================ */
+
+.container { max-width: 760px; margin: 0 auto; padding: 28px 16px 40px; }
+
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; gap: 12px; }
+.section-header h1,
+.section-header h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--text);
+}
+.section-header h1 { font-size: 32px; margin-bottom: 4px; line-height: 1.1; }
+.section-header h2 { font-size: 26px; margin-bottom: 4px; line-height: 1.1; }
+.section-header p { color: var(--muted); font-size: 13.5px; }
+
+.camera-section { margin-bottom: 28px; }
+
+
+/* ================================
+   CAMERA
+================================ */
+
+.camera-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    max-height: 72vh;
+    margin: 0 auto;
+    background: #0a0b0d;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+#video { width: 100%; height: 100%; object-fit: fill; display: none; }
+#canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
+.camera-placeholder,
+.loading {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center; color: var(--text); width: 80%;
+}
+
+.loading { display: none; }
+
+.camera-placeholder i { font-size: 44px; color: var(--faint); margin-bottom: 14px; }
+.camera-placeholder p, .loading p { color: var(--muted); font-size: 14px; margin-bottom: 18px; }
+
+#startCameraBtn {
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: var(--on-accent);
+    padding: 12px 24px; border-radius: 999px;
+    font-size: 13.5px; font-weight: 600; letter-spacing: 0.02em;
+    cursor: pointer; transition: 0.2s;
+}
+#startCameraBtn:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+#startCameraBtn i { font-size: 13px; color: var(--on-accent); margin: 0 7px 0 0; }
+
+.loading-spinner {
+    width: 36px; height: 36px;
+    border: 3px solid var(--line); border-top-color: var(--accent);
+    border-radius: 50%; margin: 0 auto 14px;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+
+/* ================================
+   KONTROL (ON/OFF)
+================================ */
+
+.controls {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.ctl {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 3px;
+    padding-top: 8px;
+    min-height: 74px;
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+
+.ctl i { font-size: 19px; color: var(--muted); transition: color 0.15s; }
+.ctl span { font-size: 13px; font-weight: 600; color: var(--text-soft); }
+.ctl small { font-size: 11px; color: var(--muted); }
+
+.ctl:hover:not(:disabled) { background: var(--card-hover); border-color: #343a43; }
+.ctl:active { transform: scale(0.97); }
+
+.ctl.active { background: var(--accent-soft); border-color: var(--accent-line); }
+.ctl.active i,
+.ctl.active span { color: var(--accent); }
+.ctl.active small { color: var(--accent-hover); }
+
+.ctl:disabled { opacity: 0.4; cursor: not-allowed; }
+.ctl:disabled:active { transform: none; }
+
+.toast {
+    position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom));
+    transform: translate(-50%, 20px);
+    background: #20242a; color: var(--text);
+    border: 1px solid var(--line);
+    padding: 10px 18px; border-radius: 999px;
+    font-size: 13px; max-width: 90%; text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    opacity: 0; pointer-events: none; transition: 0.25s; z-index: 20;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+
+/* ================================
+   INFO DETEKSI
+================================ */
+
+.detection-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+
+.info-card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 16px; padding: 14px;
+    display: flex; align-items: center; gap: 12px; min-width: 0;
+}
+
+.info-icon {
+    flex: none; width: 40px; height: 40px; border-radius: 12px;
+    background: var(--accent-soft); color: var(--accent);
+    border: 1px solid var(--accent-line);
+    display: flex; align-items: center; justify-content: center; font-size: 15px;
+}
+
+.info-label { display: block; color: var(--muted); font-size: 11px; letter-spacing: 0.03em; margin-bottom: 3px; }
+.info-card h3 { font-size: 16px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.info-card > div:last-child { min-width: 0; }
+
+
+/* ================================
+   HISTORY
+================================ */
+
+.history-section {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 22px;
+}
+.history-header { margin-bottom: 16px; }
+
+.clear-btn {
+    border: 1px solid rgba(189, 122, 122, 0.28);
+    background: var(--danger-soft); color: var(--danger);
+    padding: 9px 14px; border-radius: 999px;
+    cursor: pointer; font-size: 12.5px; font-weight: 600; transition: 0.2s; white-space: nowrap;
+}
+.clear-btn:hover { background: rgba(189, 122, 122, 0.18); }
+.clear-btn i { margin-right: 6px; }
+
+.history-container { width: 100%; overflow-x: auto; }
+
+table { width: 100%; border-collapse: collapse; min-width: 560px; }
+thead { background: var(--bg-soft); }
+th {
+    text-align: left; padding: 12px 14px;
+    font-size: 11px; color: var(--muted); font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+}
+td { padding: 13px 14px; font-size: 14px; border-bottom: 1px solid var(--line-soft); color: var(--text-soft); }
+tbody tr { transition: background 0.15s; }
+tbody tr:hover { background: var(--card-hover); }
+
+.object-name { display: flex; align-items: center; gap: 10px; font-weight: 600; color: var(--text); }
+.object-icon {
+    width: 30px; height: 30px; background: var(--accent-soft); border-radius: 9px;
+    border: 1px solid var(--accent-line);
+    display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 12px;
+}
+.confidence { font-weight: 600; color: var(--accent); }
+
+.status-badge {
+    display: inline-block; padding: 4px 11px; border-radius: 999px;
+    background: var(--ok-soft); color: var(--ok);
+    border: 1px solid rgba(130, 164, 143, 0.25);
+    font-size: 12px; font-weight: 600;
+}
+
+.empty-history { padding: 40px 20px; text-align: center; color: var(--faint); }
+.empty-history i { font-size: 30px; margin-bottom: 12px; }
+.empty-history h3 { color: var(--text-soft); font-size: 16px; margin-bottom: 4px; }
+.empty-history p { font-size: 13px; color: var(--muted); }
+
+footer { text-align: center; padding: 24px; color: var(--faint); font-size: 12px; letter-spacing: 0.04em; }
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 520px) {
+    .navbar { height: 58px; }
+    .logo { font-size: 19px; }
+    .nav-status { font-size: 11.5px; padding: 5px 11px; }
+
+    .container { padding: 18px 12px 32px; }
+    .section-header h1 { font-size: 28px; }
+    .section-header h2 { font-size: 23px; }
+
+    .camera-container { border-radius: 14px; }
+
+    .controls { gap: 8px; }
+    .ctl { min-height: 70px; border-radius: 14px; }
+
+    .detection-info { grid-template-columns: 1fr; }
+    .history-section { padding: 16px; }
+}
