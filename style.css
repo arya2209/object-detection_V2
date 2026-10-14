@@ -321,3 +321,11 @@ footer { text-align: center; padding: 24px; color: var(--faint); font-size: 12px
     .detection-info { grid-template-columns: 1fr; }
     .history-section { padding: 16px; }
 }
+
+/* Kamera depan tampil seperti cermin */
+#video.mirror { transform: scaleX(-1); }
+
+@media (max-width: 520px) {
+    .controls { gap: 6px; }
+    .ctl span { font-size: 12px; }
+}
